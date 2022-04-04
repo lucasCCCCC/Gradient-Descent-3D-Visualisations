@@ -1,39 +1,44 @@
 import numpy as np
 
 
-def compute_L2_loss(X, Y, w1, w0):
-    cost = 0
-    for i in range(len(X)):
-        cost = (1 / len(X)) * sum([val ** 2 for val in (w1 * X + w0 - Y)])
-    return cost
+class LinearRegression:
 
+    def __init__(self, w0, w1, learningRate):
+        self.w0 = w0
+        self.w1 = w1
+        self.learningRate = learningRate
 
-def gradient_descent(X, Y, w0, w1, learning_rate):
-    iterations = 1000
-    data_set_size = len(X)
+    def getWeights(self):
+        return self.w1, self.w0
 
-    print("Training model")
+    def computeL2Loss(self, X, Y):
+        return (1 / len(X)) * sum([val ** 2 for val in (self.w1 * X + self.w0 - Y)])
 
-    for i in range(iterations):
-        y = w1 * X + w0
-        w0_pd = -(2 / data_set_size) * sum(Y - y)
-        w1_pd = -(2 / data_set_size) * sum(X * (Y - y))
-        w0 = w0 - learning_rate * w0_pd
-        w1 = w1 - learning_rate * w1_pd
+    def gradientDescent(self, X, Y):
+        y = self.w1 * X + self.w0
 
-        print("Current model: y = ", w1, "x + ", w0)
-        print("Loss : ", compute_L2_loss(X, Y, w1, w0))
-        print("Iteration: ", i)
+        w0_pd = -(2 / len(X)) * sum(Y - y)
+        w1_pd = -(2 / len(X)) * sum(X * (Y - y))
 
-    print("Final model: y = ", w1, "x + ", w0)
+        self.w0 = self.w0 - self.learningRate * w0_pd
+        self.w1 = self.w1 - self.learningRate * w1_pd
 
 
 test_data = np.array([[1, 1], [1, 2], [3, 5], [3, 8], [2, 2], [2, 3], [5, 5], [4, 5], [4, 7], [4, 8],
-                      [5, 3], [6, 5], [6, 6], [6, 8], [9, 9], [9, 11], [10, 9], [10, 13], [13, 8], [13, 15]
-                         , [14, 3], [16, 16], [16, 15], [17, 20], [18, 19], [23, 20], [24, 26], [25, 18]
-                         , [20, 19], [23, 23], [22, 24], [26, 24]])
+                      [5, 3], [6, 5], [6, 6], [6, 8], [9, 9], [9, 11], [10, 9], [10, 13], [13, 8], [13, 15], [14, 3],
+                      [16, 16], [16, 15], [17, 20], [18, 19], [23, 20], [24, 26], [25, 18], [20, 19], [23, 23],
+                      [22, 24], [26, 24]])
 
-X = test_data[:, :1]
-Y = test_data[:, 1:]
+x_train_data = test_data[:, :1]
+y_train_data = test_data[:, 1:]
 
-gradient_descent(X, Y, 1, 1, 0.001)
+model = LinearRegression(1, 1, 0.001)
+print("Training model")
+
+for i in range(1000):
+    model.gradientDescent(x_train_data, y_train_data)
+    print("Current Model: ", "y = ", model.getWeights()[1], "x + ", model.getWeights()[0])
+    print("Loss: ", model.computeL2Loss(x_train_data, y_train_data))
+    print("Iteration: ", i)
+
+print("Final Model: ", "y = ", model.getWeights()[1], "x + ", model.getWeights()[0])
