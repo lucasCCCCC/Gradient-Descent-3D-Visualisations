@@ -1,6 +1,7 @@
 from matplotlib import pyplot as plt
 import numpy as np
 from celluloid import Camera
+from random import randint
 
 
 class LinearRegression:
@@ -39,7 +40,7 @@ w1Iterations = []
 costIterations = []
 predictedYValues = []
 
-model = LinearRegression(7, -3, 0.01)
+model = LinearRegression(randint(-10, 10), randint(-10, 10), 0.001)
 
 #print("Training model")
 
@@ -56,7 +57,7 @@ for i in range(1000):
 
 #print("Final Model: ", "y = ", model.getWeights()[1], "x + ", model.getWeights()[0])
 
-fig = plt.figure()
+fig = plt.figure(figsize=(10, 8))
 ax1 = fig.add_subplot(1, 2, 2)
 ax1.set_title("Regression Visualisation")
 
@@ -84,17 +85,17 @@ Z_3d = z.reshape(X_3d.shape)
 camera = Camera(fig)
 fig.suptitle("Linear Regression Visualiser")
 
-for i in range(0, len(w0Iterations), 5):
+for i in range(0, len(w0Iterations), 10):
     ax1.scatter(x_train_data, y_train_data, color="blue")
     ax1.plot(x_train_data, predictedYValues[i], color="red")
     ax1.legend(['Iteration: {:d}\nModel: y={:.4f}x+{:.4f}'.format(i, float(w1Iterations[i]), float(w0Iterations[i]))],
                loc='lower right')
 
-    ax2.plot_surface(X_3d, Y_3d, Z_3d, rstride=200, cstride=200, color="orange", alpha=0.5)
+    ax2.plot_surface(X_3d, Y_3d, Z_3d, rstride=1, cstride=1, cmap="Oranges", alpha=0.7)
     ax2.scatter(w1Iterations[i], w0Iterations[i], predictedYValues[i], color="black")
 
     camera.snap()
 
-animation = camera.animate(interval=100, repeat=False)
+animation = camera.animate(interval=2, repeat=False)
 
 plt.show()
