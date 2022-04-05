@@ -39,9 +39,9 @@ w1Iterations = []
 costIterations = []
 predictedYValues = []
 
-model = LinearRegression(2, -3, 0.001)
+model = LinearRegression(7, -3, 0.01)
 
-print("Training model")
+#print("Training model")
 
 for i in range(1000):
     model.gradientDescent(x_train_data, y_train_data)
@@ -50,16 +50,22 @@ for i in range(1000):
     costIterations.append(model.computeL2Loss(x_train_data, y_train_data))
     predictedYValues.append(model.computeY(x_train_data))
 
-    print("Current Model: ", "y = ", model.getWeights()[1], "x + ", model.getWeights()[0])
-    print("Loss: ", model.computeL2Loss(x_train_data, y_train_data))
-    print("Iteration: ", i)
+    #print("Current Model: ", "y = ", model.getWeights()[1], "x + ", model.getWeights()[0])
+    #print("Loss: ", model.computeL2Loss(x_train_data, y_train_data))
+    #print("Iteration: ", i)
 
-print("Final Model: ", "y = ", model.getWeights()[1], "x + ", model.getWeights()[0])
+#print("Final Model: ", "y = ", model.getWeights()[1], "x + ", model.getWeights()[0])
 
 fig = plt.figure()
 ax1 = fig.add_subplot(1, 2, 2)
+ax1.set_title("Regression Visualisation")
+
 ax2 = fig.add_subplot(1, 2, 1, projection='3d')
-ax2.view_init(elev=20, azim=31)
+ax2.view_init(45, -45)
+ax2.set_xlabel("w1")
+ax2.set_ylabel("w0")
+ax2.set_zlabel("L2 Loss")
+ax2.set_title("Gradient Descent Visualisation")
 
 
 def pairCosts(xs, ys, w0, w1):
@@ -84,10 +90,8 @@ for i in range(0, len(w0Iterations), 5):
     ax1.legend(['Iteration: {:d}\nModel: y={:.4f}x+{:.4f}'.format(i, float(w1Iterations[i]), float(w0Iterations[i]))],
                loc='lower right')
 
-    ax2.plot_surface(X_3d, Y_3d, Z_3d, rstride=2, cstride=2, cmap="jet", alpha=0.8)
-    ax2.set_xlabel("w0")
-    ax2.set_ylabel("w1")
-    ax2.set_zlabel("L2 Loss")
+    ax2.plot_surface(X_3d, Y_3d, Z_3d, rstride=200, cstride=200, color="orange", alpha=0.5)
+    ax2.scatter(w1Iterations[i], w0Iterations[i], predictedYValues[i], color="black")
 
     camera.snap()
 
