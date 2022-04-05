@@ -35,6 +35,7 @@ x_train_data = test_data[:, :1]
 y_train_data = test_data[:, 1:]
 w0Iterations = []
 w1Iterations = []
+costIterations = []
 predictedYValues = []
 
 
@@ -46,6 +47,7 @@ for i in range(1000):
     model.gradientDescent(x_train_data, y_train_data)
     w0Iterations.append(model.getWeights()[1])
     w1Iterations.append(model.getWeights()[0])
+    costIterations.append(model.computeL2Loss(x_train_data, y_train_data))
     predictedYValues.append(model.computeY(x_train_data))
 
     print("Current Model: ", "y = ", model.getWeights()[1], "x + ", model.getWeights()[0])
@@ -55,11 +57,19 @@ for i in range(1000):
 print("Final Model: ", "y = ", model.getWeights()[1], "x + ", model.getWeights()[0])
 
 fig = plt.figure()
+ax1 = fig.add_subplot()
+
+
 camera = Camera(fig)
+fig.suptitle("Regression Line & Gradient Descent Visualisation")
 
 for i in range(0, len(w0Iterations), 5):
-    plt.scatter(x_train_data, y_train_data, color="blue")
-    plt.plot(x_train_data, predictedYValues[i], color="red")
+
+    ax1.scatter(x_train_data, y_train_data, color="blue")
+    ax1.plot(x_train_data, predictedYValues[i], color="red")
+    ax1.legend(['Iteration: {:f}\nModel: y={:.5f}x+{:.5f}'.format(i, float(w1Iterations[i]), float(w0Iterations[i]))],
+               loc='lower right')
+
     camera.snap()
 
 animation = camera.animate(interval=100, repeat=False)
