@@ -1,4 +1,6 @@
+from matplotlib import pyplot as plt
 import numpy as np
+from celluloid import Camera
 
 
 class LinearRegression:
@@ -10,6 +12,9 @@ class LinearRegression:
 
     def getWeights(self):
         return self.w1, self.w0
+
+    def computeY(self, X):
+        return self.w1 * X + self.w0
 
     def computeL2Loss(self, X, Y):
         return (1 / len(X)) * sum([val ** 2 for val in (self.w1 * X + self.w0 - Y)])
@@ -24,21 +29,39 @@ class LinearRegression:
         self.w1 = self.w1 - self.learningRate * w1_pd
 
 
-test_data = np.array([[1, 1], [1, 2], [3, 5], [3, 8], [2, 2], [2, 3], [5, 5], [4, 5], [4, 7], [4, 8],
-                      [5, 3], [6, 5], [6, 6], [6, 8], [9, 9], [9, 11], [10, 9], [10, 13], [13, 8], [13, 15], [14, 3],
-                      [16, 16], [16, 15], [17, 20], [18, 19], [23, 20], [24, 26], [25, 18], [20, 19], [23, 23],
-                      [22, 24], [26, 24]])
+test_data = np.array([[1, 1], [2, 2], [3, 4], [4, 4], [5, 5], [5, 6], [6, 5], [7, 7], [7, 6], [8, 8], [9, 7], [10, 11]])
 
 x_train_data = test_data[:, :1]
 y_train_data = test_data[:, 1:]
+w0Iterations = []
+w1Iterations = []
+predictedYValues = []
 
-model = LinearRegression(1, 1, 0.001)
+
+model = LinearRegression(2, -3, 0.001)
+
 print("Training model")
 
 for i in range(1000):
     model.gradientDescent(x_train_data, y_train_data)
+    w0Iterations.append(model.getWeights()[1])
+    w1Iterations.append(model.getWeights()[0])
+    predictedYValues.append(model.computeY(x_train_data))
+
     print("Current Model: ", "y = ", model.getWeights()[1], "x + ", model.getWeights()[0])
     print("Loss: ", model.computeL2Loss(x_train_data, y_train_data))
     print("Iteration: ", i)
 
 print("Final Model: ", "y = ", model.getWeights()[1], "x + ", model.getWeights()[0])
+
+fig = plt.figure()
+camera = Camera(fig)
+
+for i in range(0, len(w0Iterations), 5):
+    plt.scatter(x_train_data, y_train_data, color="blue")
+    plt.plot(x_train_data, predictedYValues[i], color="red")
+    camera.snap()
+
+animation = camera.animate(interval=100, repeat=False)
+
+plt.show()
