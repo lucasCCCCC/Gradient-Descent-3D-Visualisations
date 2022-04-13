@@ -73,8 +73,8 @@ def pairCosts(xs, ys, w0, w1):
     return np.mean((ys - (xs * w1 + w0)) ** 2)
 
 
-x = np.linspace(-10, 10, 10)
-y = np.linspace(-10, 10, 10)
+x = np.linspace(-10, 10, 5)
+y = np.linspace(-10, 10, 5)
 X_3d, Y_3d = np.meshgrid(x, y)
 
 z = np.array([pairCosts(x_train_data, y_train_data, np.array([[xs]]), np.array([[ys]]))
@@ -96,6 +96,6 @@ for i in range(0, len(w0Iterations), 10):
 
     camera.snap()
 
-animation = camera.animate(interval=2, repeat=False)
+animation = camera.animate(interval=5, repeat=False, repeat_delay=0)
 
 plt.show()
