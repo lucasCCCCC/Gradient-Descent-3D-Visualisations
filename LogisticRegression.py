@@ -2,6 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from celluloid import Camera
 from scipy.special import expit
+from random import randint
 
 
 class LogisticRegression:
@@ -32,19 +33,21 @@ class LogisticRegression:
         self.w1 = self.w1 - self.learningRate * w1_pd
 
 
-test_data = np.array([[1, 0], [1.5, 0], [2, 0], [2.5, 0], [3, 0], [3.5, 0], [3.6, 1], [4, 0],
-                      [6, 1], [6.5, 1], [6.2, 0], [7, 1], [7.5, 1], [8, 1], [8.5, 1], [9, 1]])
+test_data = np.array([[1, 0], [1.5, 0], [2, 0], [2.5, 0], [3, 0], [4, 0], [4.5, 0],
+                      [5.5, 0], [6, 1], [7, 1], [7.5, 1], [8, 1], [8.5, 1], [9, 1]])
+
 
 x_train_data = test_data[:, :1]
 y_train_data = test_data[:, 1:]
 
-model = LogisticRegression(10, 8, 0.1)
+model = LogisticRegression(randint(-10, 10), randint(-10, 10), 0.1)
 
 w0Iterations = []
 w1Iterations = []
 predictedYValues = []
 
-for i in range(1000):
+
+for i in range(5000):
     model.gradientDescent(x_train_data, y_train_data)
     w0Iterations.append(model.getWeights()[1])
     w1Iterations.append(model.getWeights()[0])
@@ -70,7 +73,7 @@ def computePairCrossEntropyLoss(xs, ys, w1, w0):
     return - np.mean(ys * np.log(Z) - (1 - ys) * np.log(1 - Z))
 
 
-x = np.linspace(-5, 2.9, 40)
+x = np.linspace(-20, 2.9, 40)
 y = np.linspace(-10, 10, 40)
 X_3d, Y_3d = np.meshgrid(x, y)
 
@@ -81,15 +84,22 @@ Z_3d = z.reshape(X_3d.shape)
 
 camera = Camera(fig)
 
-for i in range(0, len(w0Iterations), 100):
+for i in range(0, len(w0Iterations), 500):
+
     ax1.scatter(x_train_data, y_train_data, color="blue")
     ax1.plot(x_train_data, predictedYValues[i], color="red")
+
+    ax1.legend(['Iteration: {:d}\nModel: y=1/1+exp(-({:.4f}x+{:.4f}))'.format(i, float(w1Iterations[i]),
+                                                                              float(w0Iterations[i]))],
+                                                                              bbox_to_anchor=(0, 0))
+
 
     ax2.plot_surface(X_3d, Y_3d, Z_3d, rstride=1, cstride=1, cmap="Reds", alpha=0.7)
     ax2.scatter(w1Iterations[i], w0Iterations[i], predictedYValues[i], antialiased=False, color="black")
 
     camera.snap()
 
-animation = camera.animate(interval=5, repeat=False, repeat_delay=0)
-
+animation = camera.animate(interval=1, repeat=False, repeat_delay=0)
+manager = plt.get_current_fig_manager()
+manager.full_screen_toggle()
 plt.show()

@@ -97,5 +97,6 @@ for i in range(0, len(w0Iterations), 10):
     camera.snap()
 
 animation = camera.animate(interval=5, repeat=False, repeat_delay=0)
-
+manager = plt.get_current_fig_manager()
+manager.full_screen_toggle()
 plt.show()
