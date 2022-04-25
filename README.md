@@ -21,7 +21,7 @@ During gradient descent, we take partial derivatives of our loss function with r
 
 We then use these values to continuously update our weights until convergence
 
-![image](https://latex.codecogs.com/png.latex?%5Cbg_white%20%5Clarge%20w_0%20%3D%20w_0%20-%20%5Calpha%20%5Ccdot%20%28%28w_1x%5E%7B%5Bn%5D%7D&plus;w_0%29-y%5E%7B%5Bn%5D%7D%29%20%5C%5C%20w_1%20%3D%20w_1%20-%20%5Calpha%20%5Ccdot%20%28%28w_1x%5E%7B%5Bn%5D%7D&plus;w_0%29-y%5E%7B%5Bn%5D%7D%29x%5E%7B%5Bn%5D%7D)
+![image](https://latex.codecogs.com/png.latex?%5Cbg_white%20%5Clarge%20w0%20%3D%20w0%20-%20%5Calpha%20%5Ccdot%20%28%5Cfrac%7B%5Cpartial%20g%28w0%2Cw1%29%7D%7B%5Cpartial%20w0%7D%29%20%5C%5C%20w1%20%3D%20w1%20-%20%5Calpha%20%5Ccdot%20%28%5Cfrac%7B%5Cpartial%20g%28w0%2Cw1%29%7D%7B%5Cpartial%20w1%7D%29)
 
 
 ### Example visualisation over a given dataset:
@@ -52,6 +52,7 @@ Loss function used - Cross entropy loss function:
 Each of our weights are updated until convergence:
 
 ![image](https://latex.codecogs.com/png.latex?%5Cinline%20%5Cbg_white%20%5Clarge%20w_0%20%3D%20w_0%20-%20%5Calpha%20%5Ccdot%20%28%5Cfrac%7B1%7D%7BN%7D%5Csum_%7Bn%3D1%7D%5E%7BN%7D%28%5Csigma%28z%29%20-%20y%5E%7B%5Bn%5D%7D%29%29%5C%5C%20w_1%20%3D%20w_1%20-%20%5Calpha%20%5Ccdot%20%28%5Cfrac%7B1%7D%7BN%7D%5Csum_%7Bn%3D1%7D%5E%7BN%7D%28%5Csigma%28z%29%20-%20y%5E%7B%5Bn%5D%7D%29x%5E%7B%5Bn%5D%7D%29%5C%5C)
+
 
 
 ### Example visualisation over a given dataset:
